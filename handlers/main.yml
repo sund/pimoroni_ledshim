@@ -1,0 +1,8 @@
+---
+# handlers file for pimoroni-ledshim
+- name: reload and enable systemd
+  service:
+    name: ledshim.service
+    state: started
+    enabled: yes
+    daemon_reload: yes

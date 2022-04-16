@@ -1,0 +1,9 @@
+---
+
+- name: install units for ledshim service
+  template:
+    dest: /etc/systemd/system
+    src: "{{ item }}"
+  loop:
+    - ledshim.service
+  notify: reload and enable systemd

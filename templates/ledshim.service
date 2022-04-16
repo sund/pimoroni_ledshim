@@ -1,0 +1,9 @@
+{{ ansible_managed|comment }}
+
+[Unit]
+Description=ledshim service
+#After=network-online.target
+
+[Service]
+ExecStart=/usr/bin/python3 /var/run/cpu_load.py
+#TimeoutStopSec=1200

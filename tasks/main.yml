@@ -1,0 +1,46 @@
+---
+# tasks file for pimoroni-ledshim
+- name: Install missing python-setuptools packages...
+  package:
+    name: '{{ item.name }}'
+    state: '{{ item.state }}'
+  with_items:
+    - { name: 'python-setuptools', state: 'present' }
+  ignore_errors: true
+  tags:
+    - packages
+    - slow
+  become: true
+
+- name: Install pip packages
+  pip:
+    name:
+      - psutil
+      - ledshim
+
+# - name: Copy and Execute the script
+#   script: files/ledshim -y
+#   register: ledshim_output
+#   args:
+#     creates: Pimoroni
+#   become: false
+#
+# - debug:
+#     msg: "pimoroni script output: {{ ledshim_output }}"
+
+- name: Copy over our cpu_load script
+  template:
+    src: templates/cpu_load.py.j2
+    dest: /var/run/cpu_load.py
+    owner: root
+    group: root
+    mode: '0740'
+
+- name: Include systemd-setup
+  include_tasks:
+    file: systemd-setup.yml
+
+    ## python alternatives
+    # sudo update-alternatives --install $(which python) python $(readlink -f $(which python3)) 3
+    # sudo update-alternatives --install $(which python) python $(readlink -f $(which python3.8)) 3
+    # sudo update-alternatives --install $(which python) python $(readlink -f $(which python2)) 2
